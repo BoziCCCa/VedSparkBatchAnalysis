@@ -1,0 +1,12 @@
+# Local conda environment (lives on D:, not committed)
+.conda-env/
+
+# Raw and derived data (lives on D:, not committed)
+Data/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc

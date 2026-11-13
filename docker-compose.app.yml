@@ -1,0 +1,32 @@
+# The Spark application: a separate container that joins the cluster's network,
+# submits a job to spark://spark-master:7077 and exits.
+# HDFS and Spark must already be running (./start.sh).
+#
+# Run:  ./run.sh                                  (smoke test)
+#       ./run.sh /app/app.py filter --where ...   (your application)
+#
+# While a job runs, its UI is at http://localhost:4040
+
+name: ved-app
+
+services:
+  spark-app:
+    build: ./spark_app
+    image: ved-spark-app
+    hostname: spark-app
+    ports:
+      - "4040:4040"
+    volumes:
+      - ./spark_app:/app                 # code changes apply without rebuilding
+      - spark-events:/tmp/spark-events   # event logs for the history server
+    networks:
+      - bigdata
+
+volumes:
+  spark-events:
+    external: true
+    name: spark-events
+
+networks:
+  bigdata:
+    external: true
