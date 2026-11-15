@@ -1,0 +1,33 @@
+# The Spark application running in local mode: a separate container that
+# joins the cluster's network to reach HDFS, but runs the whole job in a
+# single JVM (--master local[*]), with no Spark cluster involved.
+# Same code mount as docker-compose.app.yml, so scripts are identical.
+# HDFS must already be running (./start.sh).
+#
+# Run:  docker compose -f docker-compose.standalone.yml run --rm spark-standalone /app/clean.py
+#
+# While a job runs, its UI is at http://localhost:4040
+
+name: ved-standalone
+
+services:
+  spark-standalone:
+    build: ./standalone
+    image: ved-spark-standalone
+    hostname: spark-standalone
+    ports:
+      - "4040:4040"
+    volumes:
+      - ./spark_app:/app                 # same scripts as the cluster app
+      - spark-events:/tmp/spark-events   # event logs shared with the history server
+    networks:
+      - bigdata
+
+volumes:
+  spark-events:
+    external: true
+    name: spark-events
+
+networks:
+  bigdata:
+    external: true
