@@ -10,3 +10,6 @@ Data/
 # Python
 __pycache__/
 *.pyc
+
+# Benchmark output (machine-specific)
+benchmarks/results.csv
